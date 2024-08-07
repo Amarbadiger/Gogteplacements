@@ -25,15 +25,24 @@ app.use("/api/v1/hero", require("./routes/contactFormRoute"));
 app.use("/api/v1/", require("./routes/PostRoute"));
 app.use("/api/v1/feeds", require("./routes/FeedRoute"));
 
-// Serve static files from the 'dist' directory
-app.use(express.static(path.join(__dirname, "/dist")));
+// Serve static files from the 'dist' directory inside 'backend'
+const distPath = path.join(__dirname, "dist");
+console.log("Serving static files from:", distPath);
+
+app.use(express.static(distPath));
+
+// Log the contents of the dist directory
+console.log("Directory contents of dist:", fs.readdirSync(distPath));
 
 // Catchall handler: for any request that doesn't match above, send back index.html
 app.get("*", (req, res) => {
-  const indexPath = path.join(__dirname, "/dist", "index.html");
+  const indexPath = path.join(distPath, "index.html");
+  console.log("Request received for:", req.originalUrl);
+  console.log("Index file path:", indexPath);
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
+    console.error("index.html not found at:", indexPath);
     res.status(404).send("index.html not found");
   }
 });
