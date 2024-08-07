@@ -29,6 +29,13 @@ app.use("/api/v1/feeds", require("./routes/FeedRoute"));
 const distPath = path.join(__dirname, "dist");
 console.log("Serving static files from:", distPath);
 
+// Verify if dist directory exists
+if (fs.existsSync(distPath)) {
+  console.log("Dist directory exists");
+} else {
+  console.error("Dist directory does not exist");
+}
+
 app.use(express.static(distPath));
 
 // Catchall handler: for any request that doesn't match above, send back index.html
@@ -36,6 +43,7 @@ app.get("*", (req, res) => {
   const indexPath = path.join(distPath, "index.html");
   console.log("Request received for:", req.originalUrl);
   console.log("Index file path:", indexPath);
+
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
