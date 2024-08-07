@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const colors = require("colors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -27,11 +26,11 @@ app.use("/api/v1/", require("./routes/PostRoute"));
 app.use("/api/v1/feeds", require("./routes/FeedRoute"));
 
 // Serve static files from the 'dist' directory
-app.use(express.static(path.join(__dirname, "dist")));
+app.use(express.static(path.join(__dirname, "/dist")));
 
 // Catchall handler: for any request that doesn't match above, send back index.html
 app.get("*", (req, res) => {
-  const indexPath = path.join(__dirname, "dist", "index.html");
+  const indexPath = path.join(__dirname, "/dist", "index.html");
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
@@ -44,8 +43,5 @@ const port = process.env.PORT || 8080;
 
 // Start server
 app.listen(port, () => {
-  console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${port}`.bgCyan
-      .white
-  );
+  console.log(`server is running at ${port}`);
 });
