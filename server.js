@@ -5,50 +5,47 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const path = require("path");
-//dotenv config
+const fs = require("fs");
+
+// dotenv config
 dotenv.config();
 const app = express();
-//mongodb connection
+
+// MongoDB connection
 connectDB();
 
-//rest object
-
-//for both port running
+// Middleware
 app.use(cors());
-app.use(
-  cors({
-    origin: " https://gogteplacements.onrender.com",
-  })
-);
-
-//middlewares
 app.use(express.json());
 app.use(morgan("dev"));
 
-//routes
+// Routes
 app.use("/api/v1/user", require("./routes/userRoute"));
-// Admin Routes
 app.use("/api/v1/admin", require("./routes/AdminRoute"));
-//Contact Route Hero page
 app.use("/api/v1/hero", require("./routes/contactFormRoute"));
-//Post Routes
 app.use("/api/v1/", require("./routes/PostRoute"));
-// Feed Route
 app.use("/api/v1/feeds", require("./routes/FeedRoute"));
 
-app.use(express.static(path.join(__dirname, "/dist")));
+// Serve static files from the 'dist' directory
+app.use(express.static(path.join(__dirname, "dist")));
 
-// The "catchall" handler: for any request that doesn't match one above, send back index.html
+// Catchall handler: for any request that doesn't match above, send back index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/dist", "index.html"));
+  const indexPath = path.join(__dirname, "dist", "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send("index.html not found");
+  }
 });
 
-//port
+// Port
 const port = process.env.PORT || 8080;
-//listen port
+
+// Start server
 app.listen(port, () => {
   console.log(
-    `server running is running  ${process.env.NODE_MODE} mode on port ${process.env.PORT}`
-      .bgCyan.white
+    `Server running in ${process.env.NODE_ENV} mode on port ${port}`.bgCyan
+      .white
   );
 });
