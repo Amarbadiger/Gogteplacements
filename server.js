@@ -8,12 +8,6 @@ const connectDB = require("./config/db");
 //dotenv config
 dotenv.config();
 const app = express();
-app.use(
-  cors({
-    origin: " https://gogteplacements.onrender.com",
-  })
-);
-
 //mongodb connection
 connectDB();
 
@@ -21,6 +15,12 @@ connectDB();
 
 //for both port running
 app.use(cors());
+app.use(
+  cors({
+    origin: " https://gogteplacements.onrender.com",
+  })
+);
+
 //middlewares
 app.use(express.json());
 app.use(morgan("dev"));
