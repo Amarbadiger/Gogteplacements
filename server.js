@@ -7,7 +7,7 @@ const connectDB = require("./config/db");
 
 //dotenv config
 dotenv.config();
-
+const app = express();
 app.use(
   cors({
     origin: " https://gogteplacements.onrender.com",
@@ -18,7 +18,7 @@ app.use(
 connectDB();
 
 //rest object
-const app = express();
+
 //for both port running
 app.use(cors());
 //middlewares
