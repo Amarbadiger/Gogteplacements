@@ -25,14 +25,11 @@ app.use("/api/v1/hero", require("./routes/contactFormRoute"));
 app.use("/api/v1/", require("./routes/PostRoute"));
 app.use("/api/v1/feeds", require("./routes/FeedRoute"));
 
-// Serve static files from the 'dist' directory inside 'backend'
+// Serve static files from the 'dist' directory
 const distPath = path.join(__dirname, "dist");
 console.log("Serving static files from:", distPath);
 
 app.use(express.static(distPath));
-
-// Log the contents of the dist directory
-console.log("Directory contents of dist:", fs.readdirSync(distPath));
 
 // Catchall handler: for any request that doesn't match above, send back index.html
 app.get("*", (req, res) => {
@@ -42,7 +39,6 @@ app.get("*", (req, res) => {
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    console.error("index.html not found at:", indexPath);
     res.status(404).send("index.html not found");
   }
 });
